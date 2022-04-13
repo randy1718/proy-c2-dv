@@ -6,17 +6,35 @@ using Pathfinding;
 public class FlyingEnemy : MonoBehaviour
 {
     [SerializeField] GameObject player;
+    [SerializeField] float life;
+    bool isDead = false;
+    Animator myAnim;
     AIPath MyPath;
     // Start is called before the first frame update
     void Start()
     {
         MyPath = GetComponent<AIPath>();
+        myAnim = GetComponent<Animator>();
+        StartCoroutine(destroyEnemy());
     }
 
     // Update is called once per frame
     void Update()
     {
-        ChasePlayer(); 
+        ChasePlayer();
+    }
+
+    IEnumerator destroyEnemy()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            if (isDead) {  
+                Debug.Log("muertoooo!!!!!!!!!!!!!!!!!!!");
+                Destroy(gameObject);
+            }
+        }
+
     }
 
     void ChasePlayer()
@@ -45,5 +63,22 @@ public class FlyingEnemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position,6f);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Bullet(Clone)")
+        {
+            if (life == 0)
+            {
+                MyPath.isStopped = true;
+                myAnim.SetBool("isDead", true);
+                isDead = true;
+            }
+            else
+            {
+                life--;
+            }
+        }
     }
 }

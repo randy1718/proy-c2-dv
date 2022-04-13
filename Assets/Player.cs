@@ -7,15 +7,16 @@ public class Player : MonoBehaviour
     Rigidbody2D myBody;
     Animator myAnim;
     [SerializeField] float speed;
+    [SerializeField] float life;
     [SerializeField] float jumpForce;
     [SerializeField] GameObject bullet;
+    bool isDead = false;
     bool isGrounded = false;
     // Start is called before the first frame update
     void Start()
     {
         myBody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
-
         StartCoroutine(ShowTime());
 
     }
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            new WaitForSeconds(4);
             myAnim.SetLayerWeight(1, 0);
         }
     }
@@ -89,6 +91,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         float dirH = Input.GetAxis("Horizontal");
+
         if (dirH != 0)
         {
             myAnim.SetBool("IsRunning",true);
@@ -111,5 +114,55 @@ public class Player : MonoBehaviour
         {
             myBody.AddForce(new Vector2(0,20f), ForceMode2D.Impulse);
         }*/
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.name == "SE Bullet(Clone)")
+        {
+            if (life == 0)
+            {
+                myAnim.SetBool("isDead", true);
+                isDead = true;
+            }
+            else
+            {
+                life--;
+            }
+
+        }
+
+        if (collision.gameObject.tag == "Flying enemy")
+        {
+            myAnim.SetBool("isDead", true);
+            isDead = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.name == "SE Bullet(Clone)")
+        {
+            if (life == 0)
+            {
+                myAnim.SetBool("isDead", true);
+                isDead = true;
+            }
+            else
+            {
+                life--;
+            }
+            
+           
+        }
+
+        if (collision.gameObject.tag == "Flying enemy")
+        {
+            myAnim.SetBool("isDead", true);
+            isDead = true;
+        }
     }
 }

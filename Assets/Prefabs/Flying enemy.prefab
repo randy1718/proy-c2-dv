@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -6292802107897371325}
   m_Layer: 0
   m_Name: Flying enemy
-  m_TagString: Untagged
+  m_TagString: Flying enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  life: 3
 --- !u!114 &8747010090574216694
 MonoBehaviour:
   m_ObjectHideFlags: 0

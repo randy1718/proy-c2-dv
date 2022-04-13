@@ -5,26 +5,76 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     Rigidbody2D body;
-    [SerializeField] GameObject player;
+    Animator myAnim;
+    GameObject player;
+    [SerializeField] float speed;
+    Vector2 directionBullet;
+    bool isColliding = false;
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        myAnim = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(destroyBullet());
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {   
-        body.velocity = new Vector2(20, 0);
+    void Update()
+    {
+        bulletDirection();
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, directionBullet, 0.3f, LayerMask.GetMask("Ground"));
+        Debug.DrawRay(transform.position, directionBullet * 0.5f, Color.red);
+    }
+
+    IEnumerator destroyBullet()
+    {
+        while (true)
+        {
+
+            yield return new WaitForSeconds(0.3f);
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, directionBullet, 0.5f);
+            if (isColliding)
+            {
+                if (ray) {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("pruebas");
-        Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.name == "Level")
+        if (collision.gameObject.name == "Level" || collision.gameObject.tag == "Flying enemy" || collision.gameObject.tag == "Static enemy")
         {
-            Destroy(gameObject);
+            speed = 0;
+            myAnim.SetBool("isColliding", true);
+            isColliding = true;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Static enemy")
+        {
+            speed = 0;
+            myAnim.SetBool("isColliding", true);
+            isColliding = true;
+        }
+    }
+
+        public void bulletDirection()
+    {
+        if (player.transform.localScale.x == -1)
+        {
+            directionBullet = Vector2.left;
+            body.velocity = directionBullet * speed;
+        }
+        else
+        {
+            directionBullet = Vector2.right;
+            body.velocity = directionBullet * speed;
         }
     }
 
