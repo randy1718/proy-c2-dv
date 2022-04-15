@@ -7,6 +7,7 @@ public class FlyingEnemy : MonoBehaviour
 {
     [SerializeField] GameObject player;
     [SerializeField] float life;
+    Rigidbody2D myBody;
     bool isDead = false;
     Animator myAnim;
     AIPath MyPath;
@@ -15,6 +16,7 @@ public class FlyingEnemy : MonoBehaviour
     {
         MyPath = GetComponent<AIPath>();
         myAnim = GetComponent<Animator>();
+        myBody = GetComponent<Rigidbody2D>();
         StartCoroutine(destroyEnemy());
     }
 
@@ -79,6 +81,14 @@ public class FlyingEnemy : MonoBehaviour
             {
                 life--;
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Megaman")
+        {
+            myBody.bodyType = RigidbodyType2D.Static;
         }
     }
 }

@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
+  audioBoom: {fileID: 8300000, guid: bf203dcb89605dc498242295dea42025, type: 3}
 --- !u!50 &9078779673756790902
 Rigidbody2D:
   serializedVersion: 4

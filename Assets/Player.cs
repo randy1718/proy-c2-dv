@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,14 +11,25 @@ public class Player : MonoBehaviour
     [SerializeField] float life;
     [SerializeField] float jumpForce;
     [SerializeField] GameObject bullet;
-    bool isDead = false;
+    [SerializeField] float intervaloSeg;
+    [SerializeField] AudioClip audioDeath;
+    float timer;
+    bool isDead;
+    bool isDeadSound;
     bool isGrounded = false;
+    bool fShoot = false; 
     // Start is called before the first frame update
     void Start()
     {
+        isDead = false;
+        isDeadSound = false;
+        timer = Time.time;
         myBody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
-        StartCoroutine(ShowTime());
+        StartCoroutine(FinishingShoot());
+        StartCoroutine(ReloadGame());
+        StartCoroutine(PlaySoundDeath());
+        Time.timeScale = 1;
 
     }
 
@@ -40,29 +52,53 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator ShowTime()
+    IEnumerator FinishingShoot()
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
-            Debug.Log(Time.time);
+            yield return new WaitForSeconds(2f);
+            if (fShoot == true )
+            {
+                myAnim.SetLayerWeight(1, 0);
+                fShoot = false;
+            }
+        }
+    }
+
+    IEnumerator ReloadGame()
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            if (isDead == true)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                isDead = false;
+            }
+        }
+    }
+    IEnumerator PlaySoundDeath()
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            if (isDeadSound == true)
+            {
+                AudioSource.PlayClipAtPoint(audioDeath, transform.position);
+                isDead = true;
+                isDeadSound = false;
+            }
         }
     }
 
     void Fire()
     {
-        if (Input.GetKey(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && Time.time > timer && fShoot == false)
         {
             myAnim.SetLayerWeight(1,1);
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
-            }
-        }
-        else
-        {
-            new WaitForSeconds(4);
-            myAnim.SetLayerWeight(1, 0);
+            Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
+            timer = Time.time + intervaloSeg;
+            fShoot = true;
         }
     }
 
@@ -125,7 +161,8 @@ public class Player : MonoBehaviour
             if (life == 0)
             {
                 myAnim.SetBool("isDead", true);
-                isDead = true;
+                isDeadSound = true;
+                Invoke("StopGame", 0.5f);
             }
             else
             {
@@ -137,8 +174,15 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Flying enemy")
         {
             myAnim.SetBool("isDead", true);
-            isDead = true;
+            isDeadSound = true;
+            Invoke("StopGame", 0.5f);
+
         }
+    }
+
+    void StopGame()
+    {
+        Time.timeScale = 0;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -150,6 +194,7 @@ public class Player : MonoBehaviour
             {
                 myAnim.SetBool("isDead", true);
                 isDead = true;
+                Invoke("StopGame", 0.5f);
             }
             else
             {
@@ -163,6 +208,7 @@ public class Player : MonoBehaviour
         {
             myAnim.SetBool("isDead", true);
             isDead = true;
+            Invoke("StopGame", 0.5f);
         }
     }
 }

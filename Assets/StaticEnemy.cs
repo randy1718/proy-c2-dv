@@ -58,7 +58,7 @@ public class StaticEnemy : MonoBehaviour
         {
             if (life == 0)
             {
-                myAnim.SetBool("isBroken", true);
+                myAnim.SetBool("IsBroken", true);
                 isBroken = true;
             }
             else

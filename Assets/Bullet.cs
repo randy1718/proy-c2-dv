@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     Animator myAnim;
     GameObject player;
     [SerializeField] float speed;
+    [SerializeField] AudioClip audioBoom;
     Vector2 directionBullet;
     bool isColliding = false;
     // Start is called before the first frame update
@@ -37,6 +38,7 @@ public class Bullet : MonoBehaviour
             if (isColliding)
             {
                 if (ray) {
+                    AudioSource.PlayClipAtPoint(audioBoom,transform.position);
                     Destroy(gameObject);
                 }
             }
