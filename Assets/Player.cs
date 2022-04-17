@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
     bool isDead;
     bool isDeadSound;
     bool isGrounded = false;
-    bool fShoot = false; 
+    bool fShoot = false;
+    Vector2 directionBullet;
     // Start is called before the first frame update
     void Start()
     {
@@ -96,7 +97,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && Time.time > timer && fShoot == false)
         {
             myAnim.SetLayerWeight(1,1);
-            Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
+            GameObject bulletI = Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
+            Rigidbody2D rb = bulletI.GetComponent<Rigidbody2D>();
+            rb.AddForce(directionBullet * 1300,ForceMode2D.Force);
             timer = Time.time + intervaloSeg;
             fShoot = true;
         }
@@ -133,10 +136,12 @@ public class Player : MonoBehaviour
             myAnim.SetBool("IsRunning",true);
             if (dirH < 0)
             {
+                directionBullet = Vector2.left;
                 transform.localScale = new Vector2(-1,1);
             }
             else
             {
+                directionBullet = Vector2.right;
                 transform.localScale = new Vector2(1, 1);
             }
         }

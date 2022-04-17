@@ -25,6 +25,12 @@ public class Bullet : MonoBehaviour
     {
         bulletDirection();
         RaycastHit2D ray = Physics2D.Raycast(transform.position, directionBullet, 0.3f, LayerMask.GetMask("Ground"));
+        if (ray)
+        {
+            speed = 0;
+            myAnim.SetBool("isColliding", true);
+            isColliding = true;
+        }
         Debug.DrawRay(transform.position, directionBullet * 0.5f, Color.red);
     }
 
@@ -34,13 +40,10 @@ public class Bullet : MonoBehaviour
         {
 
             yield return new WaitForSeconds(0.3f);
-            RaycastHit2D ray = Physics2D.Raycast(transform.position, directionBullet, 0.5f);
             if (isColliding)
             {
-                if (ray) {
-                    AudioSource.PlayClipAtPoint(audioBoom,transform.position);
-                    Destroy(gameObject);
-                }
+                AudioSource.PlayClipAtPoint(audioBoom,transform.position);
+                Destroy(gameObject);
             }
         }
 
@@ -50,7 +53,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.name == "Level" || collision.gameObject.tag == "Flying enemy" || collision.gameObject.tag == "Static enemy")
         {
-            speed = 0;
+            body.bodyType = RigidbodyType2D.Static;
             myAnim.SetBool("isColliding", true);
             isColliding = true;
         }
@@ -60,7 +63,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.tag == "Static enemy")
         {
-            speed = 0;
+            body.bodyType = RigidbodyType2D.Static;
             myAnim.SetBool("isColliding", true);
             isColliding = true;
         }
@@ -71,12 +74,12 @@ public class Bullet : MonoBehaviour
         if (player.transform.localScale.x == -1)
         {
             directionBullet = Vector2.left;
-            body.velocity = directionBullet * speed;
+            //body.AddForce(directionBullet * speed);
         }
         else
         {
             directionBullet = Vector2.right;
-            body.velocity = directionBullet * speed;
+            //body.AddForce(directionBullet * speed);
         }
     }
 
