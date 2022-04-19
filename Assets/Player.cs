@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     Animator myAnim;
     [SerializeField] float speed;
     [SerializeField] float life;
+    [SerializeField] float speedBullet;
     [SerializeField] float jumpForce;
     [SerializeField] GameObject bullet;
     [SerializeField] float intervaloSeg;
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         StartCoroutine(ReloadGame());
         StartCoroutine(PlaySoundDeath());
         Time.timeScale = 1;
+        directionBullet = Vector2.right;
 
     }
 
@@ -50,6 +52,15 @@ public class Player : MonoBehaviour
         else if (isGrounded) 
         {
             myAnim.SetBool("IsFalling", false);
+        }
+
+        if (transform.localScale.x == 1)
+        {
+            directionBullet = Vector2.right;
+        }
+        else if (transform.localScale.x == -1)
+        {
+            directionBullet = Vector2.left;
         }
     }
 
@@ -99,7 +110,7 @@ public class Player : MonoBehaviour
             myAnim.SetLayerWeight(1,1);
             GameObject bulletI = Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
             Rigidbody2D rb = bulletI.GetComponent<Rigidbody2D>();
-            rb.AddForce(directionBullet * 1300,ForceMode2D.Force);
+            rb.AddForce(directionBullet * speedBullet,ForceMode2D.Force);
             timer = Time.time + intervaloSeg;
             fShoot = true;
         }
@@ -136,12 +147,10 @@ public class Player : MonoBehaviour
             myAnim.SetBool("IsRunning",true);
             if (dirH < 0)
             {
-                directionBullet = Vector2.left;
                 transform.localScale = new Vector2(-1,1);
             }
             else
             {
-                directionBullet = Vector2.right;
                 transform.localScale = new Vector2(1, 1);
             }
         }
@@ -167,7 +176,7 @@ public class Player : MonoBehaviour
             {
                 myAnim.SetBool("isDead", true);
                 isDeadSound = true;
-                Invoke("StopGame", 0.5f);
+                Invoke("StopGame", 0.4f);
             }
             else
             {
@@ -180,7 +189,7 @@ public class Player : MonoBehaviour
         {
             myAnim.SetBool("isDead", true);
             isDeadSound = true;
-            Invoke("StopGame", 0.5f);
+            Invoke("StopGame", 0.4f);
 
         }
     }
@@ -199,7 +208,7 @@ public class Player : MonoBehaviour
             {
                 myAnim.SetBool("isDead", true);
                 isDead = true;
-                Invoke("StopGame", 0.5f);
+                Invoke("StopGame", 0.4f);
             }
             else
             {
@@ -213,7 +222,7 @@ public class Player : MonoBehaviour
         {
             myAnim.SetBool("isDead", true);
             isDead = true;
-            Invoke("StopGame", 0.5f);
+            Invoke("StopGame", 0.4f);
         }
     }
 }

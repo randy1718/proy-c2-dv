@@ -41,18 +41,11 @@ public class FlyingEnemy : MonoBehaviour
 
     void ChasePlayer()
     {
-        float distancia = Vector2.Distance(transform.position,player.transform.position);
-        if (distancia < 8)
-        {
-            //Debug.Log("Persiguiendo");
-        }
         Debug.DrawRay(transform.position,player.transform.position,Color.red);
         Collider2D col = Physics2D.OverlapCircle(transform.position,8f,LayerMask.GetMask("Player"));
         if (col != null)
         {
             MyPath.isStopped = false;
-            //Debug.Log(col.gameObject.name);
-            //Debug.Log("Persiguiendo");
         }
         else
         {

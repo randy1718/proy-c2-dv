@@ -23,7 +23,6 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bulletDirection();
         RaycastHit2D ray = Physics2D.Raycast(transform.position, directionBullet, 0.3f, LayerMask.GetMask("Ground"));
         if (ray)
         {
@@ -68,19 +67,4 @@ public class Bullet : MonoBehaviour
             isColliding = true;
         }
     }
-
-        public void bulletDirection()
-    {
-        if (player.transform.localScale.x == -1)
-        {
-            directionBullet = Vector2.left;
-            //body.AddForce(directionBullet * speed);
-        }
-        else
-        {
-            directionBullet = Vector2.right;
-            //body.AddForce(directionBullet * speed);
-        }
-    }
-
 }
