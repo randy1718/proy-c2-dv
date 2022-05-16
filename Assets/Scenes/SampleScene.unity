@@ -13365,7 +13365,7 @@ MonoBehaviour:
   jumpForce: 20
   audioBoom: {fileID: 8300000, guid: bf203dcb89605dc498242295dea42025, type: 3}
   bullet: {fileID: 1066704551755761420, guid: 6debc59924d582b4ea8b7502e73f6182, type: 3}
-  intervaloSeg: 2
+  intervaloSeg: 1
   audioDeath: {fileID: 8300000, guid: 47a139b3abcf50d488d0db154a23c23e, type: 3}
 --- !u!1001 &1827997859
 PrefabInstance:
