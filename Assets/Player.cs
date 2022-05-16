@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] float life;
     [SerializeField] float speedBullet;
     [SerializeField] float jumpForce;
+    [SerializeField] AudioClip audioBoom;
     [SerializeField] GameObject bullet;
     [SerializeField] float intervaloSeg;
     [SerializeField] AudioClip audioDeath;
@@ -84,7 +85,7 @@ public class Player : MonoBehaviour
             yield return new WaitForSecondsRealtime(2f);
             if (isDead == true)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(2);
                 isDead = false;
             }
         }
@@ -110,6 +111,7 @@ public class Player : MonoBehaviour
             myAnim.SetLayerWeight(1,1);
             GameObject bulletI = Instantiate(bullet, new Vector3(transform.position.x + 0.4f, transform.position.y + 0.2f, -1), transform.rotation);
             Rigidbody2D rb = bulletI.GetComponent<Rigidbody2D>();
+            AudioSource.PlayClipAtPoint(audioBoom, transform.position);
             rb.AddForce(directionBullet * speedBullet,ForceMode2D.Force);
             timer = Time.time + intervaloSeg;
             fShoot = true;
@@ -188,8 +190,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Flying enemy")
         {
             myAnim.SetBool("isDead", true);
+            Invoke("StopGame", 0.7f);
             isDeadSound = true;
-            Invoke("StopGame", 0.4f);
 
         }
     }
@@ -207,7 +209,7 @@ public class Player : MonoBehaviour
             if (life == 0)
             {
                 myAnim.SetBool("isDead", true);
-                isDead = true;
+                isDeadSound = true;
                 Invoke("StopGame", 0.4f);
             }
             else
@@ -221,8 +223,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Flying enemy")
         {
             myAnim.SetBool("isDead", true);
-            isDead = true;
-            Invoke("StopGame", 0.4f);
+            Invoke("StopGame", 0.7f);
+            isDeadSound = true;
         }
     }
 }

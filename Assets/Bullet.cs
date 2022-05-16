@@ -41,7 +41,6 @@ public class Bullet : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             if (isColliding)
             {
-                AudioSource.PlayClipAtPoint(audioBoom,transform.position);
                 Destroy(gameObject);
             }
         }
