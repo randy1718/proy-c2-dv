@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Flying enemy
   - Level
+  - Static enemy
+  - EnemiesNumber
   layers:
   - Default
   - TransparentFX

@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] float intervaloSeg;
     [SerializeField] AudioClip audioDeath;
+    [SerializeField] AudioClip audioJump;
     float timer;
     bool isDead;
     bool isDeadSound;
@@ -131,6 +132,7 @@ public class Player : MonoBehaviour
             {
                 myBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
                 myAnim.SetBool("IsJumping", true);
+                AudioSource.PlayClipAtPoint(audioJump, transform.position);
             }
         }
 

@@ -7,6 +7,7 @@ public class StaticEnemy : MonoBehaviour
     [SerializeField] float life;
     [SerializeField] GameObject SE_bullet;
     [SerializeField] float intervaloSeg = 1;
+    [SerializeField] AudioClip audioDeath;
     Animator myAnim;
     float timer;
     bool isBroken = false;
@@ -15,7 +16,6 @@ public class StaticEnemy : MonoBehaviour
     {
         timer = Time.time;
         myAnim = GetComponent<Animator>();
-        StartCoroutine(destroyEnemy());
     }
 
     IEnumerator destroyEnemy()
@@ -60,6 +60,8 @@ public class StaticEnemy : MonoBehaviour
             {
                 myAnim.SetBool("IsBroken", true);
                 isBroken = true;
+                AudioSource.PlayClipAtPoint(audioDeath, transform.position);
+                StartCoroutine(destroyEnemy());
             }
             else
             {

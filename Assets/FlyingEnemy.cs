@@ -7,6 +7,7 @@ public class FlyingEnemy : MonoBehaviour
 {
     [SerializeField] GameObject player;
     [SerializeField] float life;
+    [SerializeField] AudioClip audioDeath;
     Rigidbody2D myBody;
     bool isDead = false;
     Animator myAnim;
@@ -17,7 +18,6 @@ public class FlyingEnemy : MonoBehaviour
         MyPath = GetComponent<AIPath>();
         myAnim = GetComponent<Animator>();
         myBody = GetComponent<Rigidbody2D>();
-        StartCoroutine(destroyEnemy());
     }
 
     // Update is called once per frame
@@ -69,6 +69,8 @@ public class FlyingEnemy : MonoBehaviour
                 MyPath.isStopped = true;
                 myAnim.SetBool("isDead", true);
                 isDead = true;
+                AudioSource.PlayClipAtPoint(audioDeath, transform.position);
+                StartCoroutine(destroyEnemy());
             }
             else
             {
