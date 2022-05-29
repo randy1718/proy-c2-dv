@@ -17,7 +17,6 @@ public class Bullet : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
-        StartCoroutine(destroyBullet());
     }
 
     // Update is called once per frame
@@ -54,6 +53,7 @@ public class Bullet : MonoBehaviour
             body.bodyType = RigidbodyType2D.Static;
             myAnim.SetBool("isColliding", true);
             isColliding = true;
+            StartCoroutine(destroyBullet());
         }
     }
 
@@ -64,6 +64,7 @@ public class Bullet : MonoBehaviour
             body.bodyType = RigidbodyType2D.Static;
             myAnim.SetBool("isColliding", true);
             isColliding = true;
+            StartCoroutine(destroyBullet());
         }
     }
 }

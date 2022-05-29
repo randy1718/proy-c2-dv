@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] AudioClip audioDeath;
     [SerializeField] AudioClip audioJump;
     float timer;
+    float animationLayerCooldown;
     bool isDead;
     bool isDeadSound;
     bool isGrounded = false;
@@ -31,8 +32,8 @@ public class Player : MonoBehaviour
         myBody = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         StartCoroutine(FinishingShoot());
-        StartCoroutine(ReloadGame());
-        StartCoroutine(PlaySoundDeath());
+        //StartCoroutine(ReloadGame());
+        //StartCoroutine(PlaySoundDeath());
         Time.timeScale = 1;
         directionBullet = Vector2.right;
 
@@ -100,6 +101,7 @@ public class Player : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(audioDeath, transform.position);
                 isDead = true;
+                StartCoroutine(ReloadGame());
                 isDeadSound = false;
             }
         }
@@ -115,7 +117,12 @@ public class Player : MonoBehaviour
             AudioSource.PlayClipAtPoint(audioBoom, transform.position);
             rb.AddForce(directionBullet * speedBullet,ForceMode2D.Force);
             timer = Time.time + intervaloSeg;
-            fShoot = true;
+            animationLayerCooldown = timer;
+            //fShoot = true;
+        }
+        else if (Time.time > animationLayerCooldown)
+        {
+            myAnim.SetLayerWeight(1, 0);
         }
     }
 
@@ -180,6 +187,7 @@ public class Player : MonoBehaviour
             {
                 myAnim.SetBool("isDead", true);
                 isDeadSound = true;
+                StartCoroutine(PlaySoundDeath());
                 Invoke("StopGame", 0.4f);
             }
             else
@@ -194,6 +202,7 @@ public class Player : MonoBehaviour
             myAnim.SetBool("isDead", true);
             Invoke("StopGame", 0.7f);
             isDeadSound = true;
+            StartCoroutine(PlaySoundDeath());
 
         }
     }
@@ -212,6 +221,7 @@ public class Player : MonoBehaviour
             {
                 myAnim.SetBool("isDead", true);
                 isDeadSound = true;
+                StartCoroutine(PlaySoundDeath());
                 Invoke("StopGame", 0.4f);
             }
             else
@@ -226,6 +236,7 @@ public class Player : MonoBehaviour
         {
             myAnim.SetBool("isDead", true);
             Invoke("StopGame", 0.7f);
+            StartCoroutine(PlaySoundDeath());
             isDeadSound = true;
         }
     }
