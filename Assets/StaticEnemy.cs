@@ -35,7 +35,7 @@ public class StaticEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, Vector2.left, 7f, LayerMask.GetMask("Player"));
+        RaycastHit2D ray = Physics2D.Raycast(transform.position, Vector2.left, 13f, LayerMask.GetMask("Player"));
         if (ray)
         {
             myAnim.SetBool("isNear", true);
